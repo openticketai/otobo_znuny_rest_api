@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Open Ticket AI API</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="scalar.js"></script>
+    <script>
+      fetch('scalar.config.json')
+        .then(function (response) {
+          return response.json()
+        })
+        .then(function (config) {
+          Scalar.createApiReference('#app', config)
+        })
+    </script>
+  </body>
+</html>

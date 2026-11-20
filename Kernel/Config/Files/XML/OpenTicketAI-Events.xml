@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="2.0" init="Application">
+    <otobo_config version="2.0" init="Application">
+        <Setting Name="OpenTicketAIConnector::RuntimeEventsURL" Required="0" Valid="1">
+            <Description Translatable="1">OTAI Runtime webhook URL (POST /events). Compose default
+                is
+                http://otai-runtime:8080/events. Also read from OTAI_RUNTIME_EVENTS_URL when empty.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="String"></Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::SearchEventsURL" Required="0" Valid="1">
+            <Description Translatable="1">OTAI Search webhook URL (POST /events for faq_changed).
+                Compose default is http://otai-search:8091/events. Also read from
+                OTAI_SEARCH_EVENTS_URL when empty.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="String"></Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::WebhookURL" Required="0" Valid="1">
+            <Description Translatable="1">URL that receives webhook POSTs. Also read from OTAI_WEBHOOK_URL when empty.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="String"></Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::WebhookSecret" Required="0" Valid="1">
+            <Description Translatable="1">Send-only bearer token for webhook POSTs. Also read from OTAI_API_TOKEN when empty. This token cannot call the API.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Password"></Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::Event::ticket_created" Required="0" Valid="1">
+            <Description Translatable="1">POST ticket_created.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::Event::ticket_attribute_changed" Required="0" Valid="1">
+            <Description Translatable="1">POST ticket_attribute_changed.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::Event::ticket_deleted" Required="0" Valid="1">
+            <Description Translatable="1">POST ticket_deleted.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::Event::faq_changed" Required="0" Valid="1">
+            <Description Translatable="1">POST faq_changed.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::WebhookTicketEnabled" Required="0" Valid="1">
+            <Description Translatable="1">POST ticket_created, ticket_attribute_changed, or
+                ticket_deleted
+                to Runtime when a ticket or article changes. Articles are the notes attribute.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::WebhookFAQEnabled" Required="0" Valid="1">
+            <Description Translatable="1">POST faq_changed to Search when a FAQ article changes.</Description>
+            <Navigation>Core::OpenTicketAI::Webhook</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="Ticket::EventModulePost###999-OTAITicketChanged" Required="0" Valid="1">
+            <Description Translatable="1">Notify OTAI Runtime after ticket or article changes.</Description>
+            <Navigation>Core::Event::Ticket</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Module">Kernel::System::Ticket::Event::OTAITicketChanged</Item>
+                    <Item Key="Event">
+                        (TicketCreate|TicketDelete|TicketUpdate|TicketTitleUpdate|TicketStateUpdate|TicketQueueUpdate|TicketPriorityUpdate|TicketOwnerUpdate|TicketResponsibleUpdate|TicketLockUpdate|TicketTypeUpdate|TicketServiceUpdate|TicketCustomerUpdate|TicketPendingTimeUpdate|TicketSLAUpdate|TicketMerge|TicketDynamicFieldUpdate|ArticleCreate|ArticleUpdate|ArticleSend)</Item>
+                    <Item Key="Transaction">1</Item>
+                </Hash>
+            </Value>
+        </Setting>
+        <Setting Name="FAQ::EventModulePost###999-OTAIFAQChanged" Required="0" Valid="1">
+            <Description Translatable="1">Notify OTAI Search after FAQ create, update, or delete.</Description>
+            <Navigation>Core::Event::FAQ</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Module">Kernel::System::FAQ::Event::OTAIFAQChanged</Item>
+                    <Item Key="Event">(FAQCreate|FAQUpdate|FAQDelete)</Item>
+                    <Item Key="Transaction">1</Item>
+                </Hash>
+            </Value>
+        </Setting>
+    </otobo_config>
+</otrs_config>

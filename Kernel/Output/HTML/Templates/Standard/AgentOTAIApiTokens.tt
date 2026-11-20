@@ -1,0 +1,45 @@
+<div class="WidgetSimple">
+    <div class="Header">
+        <h2>My API tokens</h2>
+    </div>
+    <div class="Content">
+        <p>A token acts as you. Queues and groups you already have are what the API can do.</p>
+        [% IF Data.TokenOnce %]
+            <p><strong>Copy this token now. It is not shown again.</strong></p>
+            <pre>[% Data.TokenOnce | html %]</pre>
+        [% END %]
+        <form action="[% Env("CGIHandle") %]" method="post">
+            <input type="hidden" name="Action" value="AgentOTAIApiTokens"/>
+            <input type="hidden" name="Subaction" value="Generate"/>
+            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+            <label>Label <input type="text" name="Label" required="required"/></label>
+            <label>Hours <input type="number" name="Hours" min="1" required="required" value="[% Data.Hours | html %]"/></label>
+            <button type="submit">Generate token</button>
+        </form>
+        <table>
+            <thead>
+                <tr><th>Label</th><th>Expires</th><th>Last used</th><th></th></tr>
+            </thead>
+            <tbody>
+                [% FOREACH Row IN Data.TokenList %]
+                    <tr>
+                        <td>[% Row.Label | html %]</td>
+                        <td>[% Row.ExpiresAt | html %]</td>
+                        <td>[% Row.LastUsedAt | html %]</td>
+                        <td>
+                            [% IF !Row.Revoked %]
+                                <form action="[% Env("CGIHandle") %]" method="post">
+                                    <input type="hidden" name="Action" value="AgentOTAIApiTokens"/>
+                                    <input type="hidden" name="Subaction" value="Revoke"/>
+                                    <input type="hidden" name="ID" value="[% Row.ID | html %]"/>
+                                    <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                                    <button type="submit">Revoke</button>
+                                </form>
+                            [% END %]
+                        </td>
+                    </tr>
+                [% END %]
+            </tbody>
+        </table>
+    </div>
+</div>

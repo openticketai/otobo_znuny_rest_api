@@ -1,0 +1,12 @@
+<div class="WidgetSimple">
+    <div class="Header">
+        <h2>API reference</h2>
+    </div>
+    <div class="Content" style="padding: 0;">
+        <iframe
+            title="API reference"
+            src="[% Data.DocsURL | html %]"
+            style="display: block; width: 100%; height: calc(100vh - 220px); border: 0; background: #fff;"
+        ></iframe>
+    </div>
+</div>

@@ -1,0 +1,178 @@
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
+    <h1 class="InvisibleText">[% Translate("Webhooks") | html %]</h1>
+
+    [% BreadcrumbPath = [
+            {
+                Name => Translate('Webhooks'),
+                Link => Env("Action"),
+            },
+        ]
+    %]
+    [% INCLUDE "Breadcrumb.tt" Path = BreadcrumbPath %]
+
+    <div class="Clear"></div>
+
+    <div class="SidebarColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("Actions") | html %]</h2>
+            </div>
+            <div class="Content">
+                <ul class="ActionList">
+                    <li>
+                        <form action="[% Env("CGIHandle") %]" method="post">
+                            <input type="hidden" name="Action" value="AdminOTAIWebhooks"/>
+                            <input type="hidden" name="Subaction" value="Generate"/>
+                            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                            <button class="CallForAction Fullsize Center" type="submit" value="[% Translate("Generate webhook token") | html %]"><span><i class="fa fa-key"></i> [% Translate("Generate webhook token") | html %]</span></button>
+                        </form>
+                    </li>
+[% IF Data.ActiveTokenID %]
+                    <li>
+                        <form action="[% Env("CGIHandle") %]" method="post">
+                            <input type="hidden" name="Action" value="AdminOTAIWebhooks"/>
+                            <input type="hidden" name="Subaction" value="Revoke"/>
+                            <input type="hidden" name="ID" value="[% Data.ActiveTokenID | html %]"/>
+                            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                            <button class="CallForAction Fullsize Center" type="submit" value="[% Translate("Revoke") | html %]"><span><i class="fa fa-ban"></i> [% Translate("Revoke") | html %]</span></button>
+                        </form>
+                    </li>
+[% END %]
+                    <li>
+                        <form action="[% Env("CGIHandle") %]" method="post">
+                            <input type="hidden" name="Action" value="AdminOTAIWebhooks"/>
+                            <input type="hidden" name="Subaction" value="Test"/>
+                            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                            <button class="CallForAction Fullsize Center" type="submit" value="[% Translate("Send test event") | html %]"><span><i class="fa fa-paper-plane"></i> [% Translate("Send test event") | html %]</span></button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="ContentColumn">
+        <p class="FieldExplanation">[% Translate("This package sends ticket and FAQ events as JSON. A Web Service is not required for OTAI.") | html %]</p>
+
+[% IF Data.TokenOnce %]
+        <div class="MessageBox Notice">
+            <p><strong>[% Translate("Copy this token now. It is not shown again.") | html %]</strong></p>
+            <p><input type="text" readonly="readonly" class="W75pc" value="[% Data.TokenOnce | html %]" onclick="this.select();" /></p>
+        </div>
+[% END %]
+[% IF Data.Tested %]
+[% IF Data.TestOk %]
+        <div class="MessageBox Notice">
+            <p>[% Translate("Test POST returned %s.", Data.TestStatus) | html %]</p>
+        </div>
+[% ELSE %]
+        <div class="MessageBox Error">
+            <p>[% Translate(Data.TestError) | html %]</p>
+[% IF Data.TestStatus %]
+            <p>[% Translate("Test POST returned %s.", Data.TestStatus) | html %]</p>
+[% END %]
+        </div>
+[% END %]
+[% END %]
+
+        <form action="[% Env("CGIHandle") %]" method="post" class="Validate">
+            <input type="hidden" name="Action" value="AdminOTAIWebhooks"/>
+            <input type="hidden" name="Subaction" value="Save"/>
+            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+
+            <div class="WidgetSimple">
+                <div class="Header">
+                    <h2>[% Translate("Receiver") | html %]</h2>
+                </div>
+                <div class="Content">
+                    <p class="FieldExplanation">[% Translate("If this URL is empty, ticket events use the Runtime URL and FAQ events use the Search URL.") | html %]</p>
+[% IF Data.RuntimeEventsURL || Data.SearchEventsURL %]
+                    <p class="FieldExplanation">
+[% IF Data.RuntimeEventsURL %]
+                        [% Translate("Runtime URL") | html %]: [% Data.RuntimeEventsURL | html %]
+[% END %]
+[% IF Data.SearchEventsURL %]
+                        [% Translate("Search URL") | html %]: [% Data.SearchEventsURL | html %]
+[% END %]
+                    </p>
+[% END %]
+                    <fieldset class="TableLike">
+                        <label for="WebhookURL">[% Translate("Receiver URL") | html %]:</label>
+                        <div class="Field">
+                            <input id="WebhookURL" type="url" name="WebhookURL" class="W75pc" value="[% Data.WebhookURL | html %]"/>
+                        </div>
+                        <div class="Clear"></div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="WidgetSimple">
+                <div class="Header">
+                    <h2>[% Translate("Events") | html %]</h2>
+                </div>
+                <div class="Content">
+                    <fieldset class="TableLike">
+                        <label for="ticket_created">[% Translate("Ticket created") | html %]:</label>
+                        <div class="Field">
+                            <input id="ticket_created" type="checkbox" name="ticket_created" value="1"[% IF Data.ticket_created %] checked="checked"[% END %]/>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ticket_attribute_changed">[% Translate("Ticket field changed") | html %]:</label>
+                        <div class="Field">
+                            <input id="ticket_attribute_changed" type="checkbox" name="ticket_attribute_changed" value="1"[% IF Data.ticket_attribute_changed %] checked="checked"[% END %]/>
+                            <p class="FieldExplanation">[% Translate("One POST per field. The body contains attribute. A new article is notes.") | html %]</p>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="ticket_deleted">[% Translate("Ticket deleted") | html %]:</label>
+                        <div class="Field">
+                            <input id="ticket_deleted" type="checkbox" name="ticket_deleted" value="1"[% IF Data.ticket_deleted %] checked="checked"[% END %]/>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <label for="faq_changed">[% Translate("FAQ changed") | html %]:</label>
+                        <div class="Field">
+                            <input id="faq_changed" type="checkbox" name="faq_changed" value="1"[% IF Data.faq_changed %] checked="checked"[% END %]/>
+                        </div>
+                        <div class="Clear"></div>
+
+                        <div class="Field SpacingTop">
+                            <button class="Primary CallForAction" type="submit" value="[% Translate("Save") | html %]"><span>[% Translate("Save") | html %]</span></button>
+                        </div>
+                        <div class="Clear"></div>
+                    </fieldset>
+                </div>
+            </div>
+        </form>
+
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("Example event") | html %]</h2>
+            </div>
+            <div class="Content">
+                <p class="FieldExplanation">[% Translate("Each POST sends Authorization: Bearer and the send token. That token cannot call the API.") | html %]</p>
+                <pre>{
+  "event_type": "ticket_attribute_changed",
+  "source_event": "ArticleCreate",
+  "subject": { "kind": "ticket", "id": "42" },
+  "attribute": "notes",
+  "article_id": "7"
+}</pre>
+            </div>
+        </div>
+
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("Send token") | html %]</h2>
+            </div>
+            <div class="Content">
+[% IF Data.HasSecret %]
+                <p>[% Translate("A send token is set.") | html %]</p>
+[% ELSE %]
+                <p>[% Translate("No send token is set. Events are not sent.") | html %]</p>
+[% END %]
+            </div>
+        </div>
+    </div>
+</div>

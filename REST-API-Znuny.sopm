@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<otrs_package version="1.0">
+    <Name>REST-API</Name>
+    <Version>1.4.0</Version>
+    <PackageMerge Name="OpenTicketAIConnector" TargetVersion="1.4.0"></PackageMerge>
+    <Framework>7.3.x</Framework>
+    <Framework>7.2.x</Framework>
+    <Framework>7.1.x</Framework>
+    <Framework>7.0.x</Framework>
+    <Framework>6.5.x</Framework>
+    <Vendor>Open Ticket AI</Vendor>
+    <URL>https://www.openticketai.com</URL>
+    <License>GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007</License>
+    <Description Lang="en">Open Ticket AI REST API, admin token screen, and webhooks for Znuny.</Description>
+    <Description Lang="de">Open Ticket AI REST-API, Admin-Token-Seite und Webhooks für Znuny.</Description>
+    <IntroInstall Type="post" Lang="en" Title="REST-API"><![CDATA[
+<p>Open <strong>Admin → API</strong> and generate a token. It is shown once. Rights are the groups of the API user.</p>
+<p>Open <strong>Admin → Webhooks</strong> to set the URL, the events, and a send-only token.</p>
+<p>Open <strong>Admin → API reference</strong> for the interactive OpenAPI documentation on this system: <tt>otai-api.pl/v1/docs</tt>.</p>
+]]></IntroInstall>
+    <IntroInstall Type="post" Lang="de" Title="REST-API"><![CDATA[
+<p>Öffnen Sie <strong>Admin → API</strong>. Die Seite zeigt den API-Benutzer, seine Gruppen und seine Rollen. Erzeugen Sie dort ein Token. Es wird nur einmal angezeigt. Der API-Benutzer ist nicht in der Gruppe users und kann sich nicht anmelden.</p>
+<p>Öffnen Sie <strong>Admin → Webhooks</strong> für die URL, die Events und ein Token nur zum Senden.</p>
+<p>Öffnen Sie <strong>Admin → API-Referenz</strong> für die interaktive OpenAPI-Dokumentation auf diesem System: <tt>otai-api.pl/v1/docs</tt>.</p>
+]]></IntroInstall>
+    <BuildDate>?</BuildDate>
+    <BuildHost>?</BuildHost>
+    <DatabaseInstall Type="post">
+        <TableCreate Name="otai_api_token">
+            <Column Name="id" Required="true" PrimaryKey="true" AutoIncrement="true" Type="BIGINT" />
+            <Column Name="user_id" Required="true" Type="INTEGER" />
+            <Column Name="customer_user_login" Required="true" Size="255" Type="VARCHAR" />
+            <Column Name="label" Required="true" Size="200" Type="VARCHAR" />
+            <Column Name="kind" Required="true" Size="32" Type="VARCHAR" />
+            <Column Name="token_hash" Required="true" Size="64" Type="VARCHAR" />
+            <Column Name="expires_at" Required="true" Type="BIGINT" />
+            <Column Name="created_at" Required="true" Type="BIGINT" />
+            <Column Name="last_used_at" Required="true" Type="BIGINT" />
+            <Column Name="revoked" Required="true" Type="SMALLINT" />
+        </TableCreate>
+    </DatabaseInstall>
+    <DatabaseUninstall Type="pre">
+        <TableDrop Name="otai_api_token" />
+    </DatabaseUninstall>
+    <Filelist>
+        <File Permission="644" Location="Kernel/Config/Files/XML/OpenTicketAI.xml" />
+        <File Permission="644" Location="Kernel/Config/Files/XML/OpenTicketAI-Events.xml" />
+        <File Permission="644" Location="Kernel/Output/HTML/FilterElementPost/OpenTicketAIFooter.pm" />
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminOTAIApi.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminOTAIApiDocs.tt" />
+        <File Permission="644" Location="Kernel/Output/HTML/Templates/Standard/AdminOTAIWebhooks.tt" />
+        <File Permission="644"
+            Location="Kernel/Output/HTML/Templates/Standard/AgentOTAIApiTokens.tt" />
+        <File Permission="644" Location="Kernel/Language/de_OpenTicketAIConnector.pm" />
+        <File Permission="644" Location="Kernel/Modules/AdminOTAIApi.pm" />
+        <File Permission="644" Location="Kernel/Modules/AdminOTAIApiDocs.pm" />
+        <File Permission="644" Location="Kernel/Modules/AdminOTAIWebhooks.pm" />
+        <File Permission="644" Location="Kernel/Modules/AgentOTAIApiTokens.pm" />
+        <File Permission="755" Location="bin/cgi-bin/otai-api.pl" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/AgentLoginBlock.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/Catalog.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/EventNotifyCommon.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/Rest.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/Setup.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/TicketEventMap.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/Tickets.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/Token.pm" />
+        <File Permission="644" Location="Kernel/System/OpenTicketAIConnector/WebhookClient.pm" />
+        <File Permission="644" Location="Kernel/System/FAQ/Event/OTAIFAQChanged.pm" />
+        <File Permission="644" Location="Kernel/System/Ticket/Event/OTAITicketChanged.pm" />
+        <File Permission="644" Location="var/httpd/htdocs/common/img/OpenTicketAI.svg" />
+        <File Permission="644" Location="var/httpd/htdocs/otai-api/docs.html" />
+        <File Permission="644" Location="var/httpd/htdocs/otai-api/openapi.yaml" />
+        <File Permission="644" Location="var/httpd/htdocs/otai-api/scalar.config.json" />
+        <File Permission="644" Location="var/httpd/htdocs/otai-api/scalar.js" />
+        <FileDoc Location="doc/en/OpenTicketAIConnector.pdf" Permission="660" />
+        <FileDoc Location="doc/de/OpenTicketAIConnector.pdf" Permission="660" />
+    </Filelist>
+    <CodeInstall Type="post"><![CDATA[
+        $Kernel::OM->Get('Kernel::System::OpenTicketAIConnector::Setup')->Install();
+    ]]></CodeInstall>
+    <CodeReinstall Type="post"><![CDATA[
+        $Kernel::OM->Get('Kernel::System::OpenTicketAIConnector::Setup')->Install();
+    ]]></CodeReinstall>
+    <CodeUpgrade Type="post"><![CDATA[
+        $Kernel::OM->Get('Kernel::System::OpenTicketAIConnector::Setup')->Install();
+    ]]></CodeUpgrade>
+    <CodeUninstall Type="pre"><![CDATA[
+        $Kernel::OM->Get('Kernel::System::OpenTicketAIConnector::Setup')->Uninstall();
+    ]]></CodeUninstall>
+</otrs_package>

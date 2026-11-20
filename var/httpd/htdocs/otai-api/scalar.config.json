@@ -1,0 +1,45 @@
+{
+  "url": "openapi.json",
+  "layout": "modern",
+  "theme": "purple",
+  "customCss": ":root, .light-mode, .dark-mode { --scalar-color-accent: #a60df2; --scalar-color-purple: #a60df2; --scalar-button-1: #7b09b5; --scalar-button-1-color: #ffffff; --scalar-button-1-hover: #a60df2; --scalar-link-color: #7b09b5; --scalar-background-accent: #f6e8fd; }",
+  "agent": {
+    "disabled": true
+  },
+  "telemetry": false,
+  "withDefaultFonts": false,
+  "persistAuth": false,
+  "documentDownloadType": "json",
+  "defaultHttpClient": {
+    "targetKey": "python",
+    "clientKey": "requests"
+  },
+  "featuredClients": ["shell/curl", "python/requests", "js/fetch", "php/curl"],
+  "hiddenClients": {
+    "c": true,
+    "clojure": true,
+    "csharp": true,
+    "dart": true,
+    "fsharp": true,
+    "go": true,
+    "http": true,
+    "java": true,
+    "julia": true,
+    "kotlin": true,
+    "node": true,
+    "objc": true,
+    "ocaml": true,
+    "powershell": true,
+    "r": true,
+    "ruby": true,
+    "rust": true,
+    "swift": true,
+    "js": ["axios", "jquery", "ofetch", "xhr"],
+    "php": ["guzzle", "laravel"],
+    "python": ["aiohttp", "httpx_async", "httpx_sync", "python3"],
+    "shell": ["httpie", "wget"]
+  },
+  "authentication": {
+    "preferredSecurityScheme": "BearerAuth"
+  }
+}

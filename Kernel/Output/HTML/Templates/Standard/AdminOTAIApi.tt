@@ -1,0 +1,221 @@
+<style>
+    .OTAIApiToggleForm {
+        margin: 0;
+    }
+    .OTAIApiToggle {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 8px 10px;
+        border: 1px solid #c5cad3;
+        border-radius: 8px;
+        background: #fff;
+        color: inherit;
+        font: inherit;
+        font-weight: 600;
+        text-align: left;
+        cursor: pointer;
+    }
+    .OTAIApiToggle:hover,
+    .OTAIApiToggle:focus-visible {
+        border-color: var(--colMainLight, #1a4fd8);
+    }
+    .OTAIApiToggleTrack {
+        position: relative;
+        flex: 0 0 auto;
+        width: 44px;
+        height: 24px;
+        border-radius: 999px;
+        background: #c5cad3;
+    }
+    .OTAIApiToggleKnob {
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+    .OTAIApiToggle.IsOn .OTAIApiToggleTrack {
+        background: var(--colMainLight, #1a4fd8);
+    }
+    .OTAIApiToggle.IsOn .OTAIApiToggleKnob {
+        left: 22px;
+    }
+    .OTAIApiToggle:disabled {
+        cursor: wait;
+        opacity: 0.55;
+    }
+    td.OTAIActions {
+        vertical-align: middle;
+    }
+    .OTAIActionsRow {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 28px;
+    }
+    .OTAIActionsRow form {
+        display: contents;
+        margin: 0;
+    }
+    .OTAIActionsRow .CallForAction,
+    .OTAIActionsRow button.CallForAction {
+        margin: 0;
+        white-space: nowrap;
+    }
+    .OTAIActionsRow a.CallForAction:hover,
+    .OTAIActionsRow button.CallForAction:hover,
+    .OTAIActionsRow a.CallForAction:hover span,
+    .OTAIActionsRow button.CallForAction:hover span {
+        background-color: #001a66;
+        color: #fff;
+    }
+</style>
+<div class="MainBox ARIARoleMain LayoutFixedSidebar SidebarFirst">
+    <h1 class="InvisibleText">[% Translate("API") | html %]</h1>
+
+    [% BreadcrumbPath = [
+            {
+                Name => Translate('API'),
+                Link => Env("Action"),
+            },
+        ]
+    %]
+    [% INCLUDE "Breadcrumb.tt" Path = BreadcrumbPath %]
+
+    <div class="Clear"></div>
+
+    <div class="SidebarColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("Actions") | html %]</h2>
+            </div>
+            <div class="Content">
+                <ul class="ActionList">
+                    <li>
+                        <a class="CallForAction Fullsize Center" href="[% Data.DocsURL | html %]"><span><i class="fa fa-book"></i> [% Translate("API reference") | html %]</span></a>
+                    </li>
+                    <li>
+                        <form class="OTAIApiToggleForm" action="[% Env("CGIHandle") %]" method="post" onsubmit="if (this.dataset.sent) return false; this.dataset.sent = '1'; var Button = this.querySelector('button'); Button.disabled = true; Button.setAttribute('aria-busy', 'true');">
+                            <input type="hidden" name="Action" value="AdminOTAIApi"/>
+                            <input type="hidden" name="Subaction" value="SaveEnabled"/>
+                            <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                            <input type="hidden" name="ApiEnabled" value="[% IF Data.ApiEnabled %]0[% ELSE %]1[% END %]"/>
+                            <button type="submit" class="OTAIApiToggle[% IF Data.ApiEnabled %] IsOn[% END %]" aria-pressed="[% IF Data.ApiEnabled %]true[% ELSE %]false[% END %]">
+                                <span class="OTAIApiToggleTrack" aria-hidden="true"><span class="OTAIApiToggleKnob"></span></span>
+                                <span class="OTAIApiToggleLabel">[% IF Data.ApiEnabled %][% Translate("API on") | html %][% ELSE %][% Translate("API off") | html %][% END %]</span>
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="ContentColumn">
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("New system user") | html %]</h2>
+            </div>
+            <div class="Content">
+                <p class="FieldExplanation">[% Translate("A new token creates a system user. That account is not in the users group and cannot sign in. Each system user has one token or none.") | html %]</p>
+[% IF Data.Error %]
+                <p class="Error">[% Translate(Data.Error) | html %]</p>
+[% END %]
+[% IF Data.TokenOnce %]
+                <div class="MessageBox Notice">
+                    <p><strong>[% Translate("Copy this token now. It is not shown again.") | html %]</strong></p>
+[% IF Data.TokenUser %]
+                    <p>[% Translate("Login") | html %]: <strong>[% Data.TokenUser | html %]</strong></p>
+[% END %]
+                    <p><input type="text" readonly="readonly" class="W75pc" value="[% Data.TokenOnce | html %]" onclick="this.select();" /></p>
+                </div>
+[% END %]
+                <form action="[% Env("CGIHandle") %]" method="post" class="Validate">
+                    <input type="hidden" name="Action" value="AdminOTAIApi"/>
+                    <input type="hidden" name="Subaction" value="Create"/>
+                    <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                    <fieldset class="TableLike">
+                        <label class="Mandatory" for="OTAITokenLabel"><span class="Marker">*</span> [% Translate("Name") | html %]:</label>
+                        <div class="Field">
+                            <input id="OTAITokenLabel" type="text" name="Label" class="W50pc Validate_Required" required="required" />
+                        </div>
+                        <div class="Clear"></div>
+                        <label class="Mandatory" for="OTAITokenLifetime"><span class="Marker">*</span> [% Translate("Valid for") | html %]:</label>
+                        <div class="Field">
+                            <select id="OTAITokenLifetime" name="Lifetime" class="Modernize W50pc Validate_Required" required="required">
+[% FOREACH Choice IN Data.Lifetimes %]
+                                <option value="[% Choice.Key | html %]"[% IF Choice.Selected %] selected="selected"[% END %]>[% Translate(Choice.Label) | html %]</option>
+[% END %]
+                            </select>
+                        </div>
+                        <div class="Clear"></div>
+                        <div class="Field SpacingTop">
+                            <button class="Primary CallForAction" type="submit" value="[% Translate("Create system user") | html %]"><span>[% Translate("Create system user") | html %]</span></button>
+                        </div>
+                        <div class="Clear"></div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+
+        <div class="WidgetSimple">
+            <div class="Header">
+                <h2>[% Translate("System users") | html %]</h2>
+            </div>
+            <div class="Content">
+[% IF !Data.SystemUsers.size %]
+                <p class="FieldExplanation">[% Translate("No system users yet.") | html %]</p>
+[% ELSE %]
+                <table class="DataTable">
+                    <thead>
+                        <tr>
+                            <th>[% Translate("User") | html %]</th>
+                            <th>[% Translate("Groups") | html %]</th>
+                            <th>[% Translate("Roles") | html %]</th>
+                            <th>[% Translate("Expires") | html %]</th>
+                            <th>[% Translate("Last used") | html %]</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+[% FOREACH User IN Data.SystemUsers %]
+                        <tr>
+                            <td>
+                                <strong>[% User.Login | html %]</strong>
+                                <div class="FieldExplanation">[% User.Fullname | html %]</div>
+                            </td>
+                            <td>[% IF User.Groups %][% User.Groups | html %][% ELSE %][% Translate("No groups") | html %][% END %]</td>
+                            <td>[% IF User.Roles %][% User.Roles | html %][% ELSE %][% Translate("No roles") | html %][% END %]</td>
+                            <td>[% IF User.ExpiresNever %][% Translate("Never") | html %][% ELSE %][% User.Expires | html %][% END %]</td>
+                            <td>[% IF User.LastUsed %][% User.LastUsed | html %][% ELSIF User.TokenID %][% Translate("Never") | html %][% END %]</td>
+                            <td class="OTAIActions">
+                                <div class="OTAIActionsRow">
+                                    <a class="CallForAction" href="[% Env("Baselink") %]Action=AdminUserGroup;Subaction=User;ID=[% User.UserID | uri %]"><span>[% Translate("Change groups") | html %]</span></a>
+                                    <a class="CallForAction" href="[% Env("Baselink") %]Action=AdminRoleUser;Subaction=User;ID=[% User.UserID | uri %]"><span>[% Translate("Change roles") | html %]</span></a>
+[% IF User.TokenID %]
+                                    <form action="[% Env("CGIHandle") %]" method="post">
+                                        <input type="hidden" name="Action" value="AdminOTAIApi"/>
+                                        <input type="hidden" name="Subaction" value="Revoke"/>
+                                        <input type="hidden" name="ID" value="[% User.TokenID | html %]"/>
+                                        <input type="hidden" name="ChallengeToken" value="[% Data.ChallengeToken | html %]"/>
+                                        <button class="CallForAction" type="submit" value="[% Translate("Revoke") | html %]"><span>[% Translate("Revoke") | html %]</span></button>
+                                    </form>
+[% END %]
+                                </div>
+                            </td>
+                        </tr>
+[% END %]
+                    </tbody>
+                </table>
+[% END %]
+            </div>
+        </div>
+    </div>
+</div>

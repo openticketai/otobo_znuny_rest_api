@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<otrs_config version="2.0" init="Application">
+    <otobo_config version="2.0" init="Application">
+        <Setting Name="OpenTicketAIConnector::AgentUserLogin" Required="1" Valid="1">
+            <Description Translatable="1">Login of the integration API user. Tokens of kind api are
+                bound to this user.</Description>
+            <Navigation>Core::OpenTicketAI::Agent</Navigation>
+            <Value>
+                <Item ValueType="String">otai-webservice</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::AgentEmail" Required="0" Valid="1">
+            <Description Translatable="1">Email address of the integration API user.</Description>
+            <Navigation>Core::OpenTicketAI::Agent</Navigation>
+            <Value>
+                <Item ValueType="String">ai@otai.local</Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::ApiEnabled" Required="0" Valid="1">
+            <Description Translatable="1">Turn the Open Ticket AI REST API on or off.</Description>
+            <Navigation>Core::OpenTicketAI::API</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="PreApplicationModule###AgentOTAIApiUserBlock" Required="0" Valid="1">
+            <Description Translatable="1">Stops the Open Ticket AI API user from using the agent
+                interface.</Description>
+            <Navigation>Frontend::Agent::PreApplicationModule</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Module">Kernel::System::OpenTicketAIConnector::AgentLoginBlock</Item>
+                </Hash>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::TokenTTLHours" Required="1" Valid="1">
+            <Description Translatable="1">Lifetime in hours for API, agent, and customer tokens.</Description>
+            <Navigation>Core::OpenTicketAI::API</Navigation>
+            <Value>
+                <Item ValueType="String">12</Item>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::Module###AdminOTAIApi" Required="0" Valid="1">
+            <Description Translatable="1">Admin screen for Open Ticket AI API tokens.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+            <Value>
+                <Item ValueType="FrontendRegistration">
+                    <Hash>
+                        <Item Key="Group">
+                            <Array>
+                                <Item>admin</Item>
+                            </Array>
+                        </Item>
+                        <Item Key="GroupRo">
+                            <Array></Array>
+                        </Item>
+                        <Item Key="Description" Translatable="1">API tokens.</Item>
+                        <Item Key="Title" Translatable="1">API</Item>
+                        <Item Key="NavBarName">Admin</Item>
+                    </Hash>
+                </Item>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::NavigationModule###AdminOTAIApi" Required="0" Valid="1">
+            <Description Translatable="1">Admin overview entry for the API screen.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration::AdminOverview</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>admin</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array></Array>
+                    </Item>
+                    <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
+                    <Item Key="Name" Translatable="1">API</Item>
+                    <Item Key="Block">Automation</Item>
+                    <Item Key="Description" Translatable="1">Open Ticket AI API tokens and docs.</Item>
+                    <Item Key="IconBig">fa-code</Item>
+                    <Item Key="IconSmall"></Item>
+                    <Item Key="Prio">8100</Item>
+                </Hash>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::Module###AdminOTAIApiDocs" Required="0" Valid="1">
+            <Description Translatable="1">Admin screen for the Open Ticket AI OpenAPI reference.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+            <Value>
+                <Item ValueType="FrontendRegistration">
+                    <Hash>
+                        <Item Key="Group">
+                            <Array>
+                                <Item>admin</Item>
+                            </Array>
+                        </Item>
+                        <Item Key="GroupRo">
+                            <Array></Array>
+                        </Item>
+                        <Item Key="Description" Translatable="1">Interactive OpenAPI reference for
+                            this system.</Item>
+                        <Item Key="Title" Translatable="1">API reference</Item>
+                        <Item Key="NavBarName">Admin</Item>
+                    </Hash>
+                </Item>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::NavigationModule###AdminOTAIApiDocs" Required="0" Valid="1">
+            <Description Translatable="1">Admin overview entry for the OpenAPI reference.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration::AdminOverview</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>admin</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array></Array>
+                    </Item>
+                    <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
+                    <Item Key="Name" Translatable="1">API reference</Item>
+                    <Item Key="Block">Automation</Item>
+                    <Item Key="Description" Translatable="1">Interactive OpenAPI reference for this
+                        system.</Item>
+                    <Item Key="IconBig">fa-book</Item>
+                    <Item Key="IconSmall"></Item>
+                    <Item Key="Prio">8150</Item>
+                </Hash>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::Module###AdminOTAIWebhooks" Required="0" Valid="1">
+            <Description Translatable="1">Admin screen for Open Ticket AI webhooks.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration</Navigation>
+            <Value>
+                <Item ValueType="FrontendRegistration">
+                    <Hash>
+                        <Item Key="Group">
+                            <Array>
+                                <Item>admin</Item>
+                            </Array>
+                        </Item>
+                        <Item Key="GroupRo">
+                            <Array></Array>
+                        </Item>
+                        <Item Key="Description" Translatable="1">Webhooks.</Item>
+                        <Item Key="Title" Translatable="1">Webhooks</Item>
+                        <Item Key="NavBarName">Admin</Item>
+                    </Hash>
+                </Item>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::NavigationModule###AdminOTAIWebhooks" Required="0" Valid="1">
+            <Description Translatable="1">Admin overview entry for webhooks.</Description>
+            <Navigation>Frontend::Admin::ModuleRegistration::AdminOverview</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Group">
+                        <Array>
+                            <Item>admin</Item>
+                        </Array>
+                    </Item>
+                    <Item Key="GroupRo">
+                        <Array></Array>
+                    </Item>
+                    <Item Key="Module">Kernel::Output::HTML::NavBar::ModuleAdmin</Item>
+                    <Item Key="Name" Translatable="1">Webhooks</Item>
+                    <Item Key="Block">Automation</Item>
+                    <Item Key="Description" Translatable="1">URL, events, and the webhook token.</Item>
+                    <Item Key="IconBig">fa-exchange</Item>
+                    <Item Key="IconSmall"></Item>
+                    <Item Key="Prio">8200</Item>
+                </Hash>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::Module###AgentOTAIApiTokens" Required="0" Valid="1">
+            <Description Translatable="1">Personal API tokens for the signed-in agent.</Description>
+            <Navigation>Frontend::Agent::ModuleRegistration</Navigation>
+            <Value>
+                <Item ValueType="FrontendRegistration">
+                    <Hash>
+                        <Item Key="Group">
+                            <Array>
+                                <Item>users</Item>
+                            </Array>
+                        </Item>
+                        <Item Key="GroupRo">
+                            <Array></Array>
+                        </Item>
+                        <Item Key="Description" Translatable="1">My API tokens.</Item>
+                        <Item Key="Title" Translatable="1">My API tokens</Item>
+                        <Item Key="NavBarName">Ticket</Item>
+                    </Hash>
+                </Item>
+            </Value>
+        </Setting>
+        <Setting Name="OpenTicketAIConnector::CustomerFooter::Enabled" Required="0" Valid="1">
+            <Description Translatable="1">Show the OpenTicketAI privacy footer in the customer and
+                public interfaces.</Description>
+            <Navigation>Core::OpenTicketAI::Branding</Navigation>
+            <Value>
+                <Item ValueType="Checkbox">1</Item>
+            </Value>
+        </Setting>
+        <Setting Name="Frontend::Output::FilterElementPost###OpenTicketAIFooter" Required="0"
+            Valid="1">
+            <Description Translatable="1">Adds the optional OpenTicketAI privacy footer to the
+                customer and public interfaces.</Description>
+            <Navigation>Frontend::Base::OutputFilter</Navigation>
+            <Value>
+                <Hash>
+                    <Item Key="Module">Kernel::Output::HTML::FilterElementPost::OpenTicketAIFooter</Item>
+                    <Item Key="Templates">
+                        <Hash>
+                            <Item Key="CustomerFooter">1</Item>
+                            <Item Key="CustomerLogin">1</Item>
+                        </Hash>
+                    </Item>
+                </Hash>
+            </Value>
+        </Setting>
+    </otobo_config>
+</otrs_config>

@@ -1,0 +1,1234 @@
+openapi: 3.2.1
+info:
+  title: Open Ticket AI Ticket System API
+  description: |-
+    Bearer-token REST API installed by the REST-API package on
+    OTOBO and Znuny. Permissions are the bound agent or customer user.
+    Webhook deliveries are outbound POSTs from the package, not a route on
+    this server. Auth: Authorization: Bearer <token>. JSON only.
+  version: 0.0.0
+tags: []
+paths:
+  /v1/agents:
+    get:
+      operationId: Agents_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/auth/agent:
+    post:
+      operationId: Auth_agent
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+  /v1/config-items:
+    get:
+      operationId: ConfigItems_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConfigItemList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/customer-users:
+    get:
+      operationId: CustomerUsers_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/customer-companies:
+    get:
+      operationId: CustomerCompanies_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/docs:
+    get:
+      operationId: ScalarDocs_page
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /v1/dynamic-fields:
+    get:
+      operationId: DynamicFields_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicFieldList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+    post:
+      operationId: DynamicFields_create
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicFieldCreated'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DynamicFieldCreate'
+      security:
+        - BearerAuth: []
+  /v1/dynamic-fields/{name}/values:
+    get:
+      operationId: DynamicFields_values
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DynamicFieldValues'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/faqs:
+    get:
+      operationId: Faqs_list
+      parameters:
+        - name: What
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: Limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+        - name: Visibility
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/faqs/{id}:
+    get:
+      operationId: Faqs_get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: Faqs_update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaqList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FaqPatch'
+      security:
+        - BearerAuth: []
+  /v1/openapi.json:
+    get:
+      operationId: OpenApiDocument_spec
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+  /v1/priorities:
+    get:
+      operationId: Priorities_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/queues:
+    get:
+      operationId: Queues_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/services:
+    get:
+      operationId: Services_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/states:
+    get:
+      operationId: States_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+  /v1/tickets:
+    get:
+      operationId: Tickets_list
+      parameters:
+        - name: queue
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: state
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: priority
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+          explode: false
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+          explode: false
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+    post:
+      operationId: Tickets_create
+      parameters: []
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketWrite'
+      security:
+        - BearerAuth: []
+  /v1/tickets/{id}:
+    get:
+      operationId: Tickets_get
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+    patch:
+      operationId: Tickets_update
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketPatch'
+      security:
+        - BearerAuth: []
+  /v1/tickets/{id}/articles:
+    post:
+      operationId: Tickets_addArticle
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: The request has succeeded and a new resource has been created as a result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ticket'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleBody'
+      security:
+        - BearerAuth: []
+  /v1/types:
+    get:
+      operationId: Types_list
+      parameters: []
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CatalogList'
+        '401':
+          description: Access is unauthorized.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorBody'
+      security:
+        - BearerAuth: []
+components:
+  schemas:
+    AgentList:
+      type: object
+      required:
+        - Count
+        - Item
+      properties:
+        Count:
+          type: integer
+          format: int32
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgentRow'
+    AgentRow:
+      type: object
+      required:
+        - ID
+        - Login
+      properties:
+        ID:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Agent user id.
+        Login:
+          type: string
+          description: Agent login.
+    Article:
+      type: object
+      required:
+        - ArticleID
+        - Subject
+        - Body
+        - From
+        - SenderType
+        - Created
+        - IsVisibleForCustomer
+        - article_id
+        - subject
+        - body
+      properties:
+        ArticleID:
+          type: string
+          pattern: ^[0-9]+$
+          description: Article id as a decimal string. Same value as article_id.
+        Subject:
+          type: string
+          description: Article subject line.
+        Body:
+          type: string
+          description: Article text.
+        From:
+          type: string
+          description: From header, usually `Name <email>`.
+        SenderType:
+          type: string
+          enum:
+            - agent
+            - customer
+            - system
+          description: Author kind.
+        Created:
+          type: string
+          description: Local ticket-system time, `YYYY-MM-DD HH:MM:SS`. Empty when the system has no timestamp.
+        IsVisibleForCustomer:
+          type: number
+          enum:
+            - 0
+            - 1
+          description: 1 when a customer may see this article. 0 for internal notes.
+        article_id:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Article id as an integer.
+        subject:
+          type: string
+          description: Same text as Subject.
+        body:
+          type: string
+          description: Same text as Body.
+    ArticleBody:
+      type: object
+      required:
+        - subject
+        - body
+        - content_type
+        - sender_type
+      properties:
+        subject:
+          type: string
+          description: Article subject line.
+        body:
+          type: string
+          description: Article text. Plain text or HTML, matching content_type.
+        content_type:
+          type: string
+          enum:
+            - text/plain
+            - text/html
+          description: MIME type of body.
+        sender_type:
+          type: string
+          enum:
+            - agent
+            - customer
+            - system
+          description: Author kind stored on the new article.
+    CatalogItem:
+      type: object
+      required:
+        - ID
+        - Name
+        - Comment
+        - Valid
+      properties:
+        ID:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Primary key.
+        Name:
+          type: string
+          description: Display name.
+        Comment:
+          type: string
+          description: Admin comment. Empty when the catalogue has none.
+        Valid:
+          type: number
+          enum:
+            - 0
+            - 1
+          description: 1 when the row is valid.
+    CatalogList:
+      type: object
+      required:
+        - Item
+      properties:
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/CatalogItem'
+    ConfigItemList:
+      type: object
+      required:
+        - Item
+      properties:
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfigItemRow'
+    ConfigItemRow:
+      type: object
+      required:
+        - ConfigItemID
+        - Number
+        - Name
+        - ClassID
+        - Class
+        - DeplState
+        - InciState
+        - CreateTime
+        - ChangeTime
+      properties:
+        ConfigItemID:
+          type: integer
+          minimum: 1
+          description: Configuration item id.
+        Number:
+          type: string
+          description: Configuration item number.
+        Name:
+          type: string
+          description: Name of the current version.
+        ClassID:
+          type: integer
+          minimum: 0
+          description: Class id.
+        Class:
+          type: string
+          description: Class name, for example Computer or Room.
+        DeplState:
+          type: string
+          description: Current deployment state.
+        InciState:
+          type: string
+          description: Current incident state.
+        CreateTime:
+          type: string
+        ChangeTime:
+          type: string
+    CustomerList:
+      type: object
+      required:
+        - Item
+      properties:
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomerRow'
+    CustomerRow:
+      type: object
+      required:
+        - ID
+        - Name
+      properties:
+        ID:
+          type: string
+          description: Customer company id, or the customer user login for customer users.
+        Name:
+          type: string
+          description: Display name.
+    DynamicFieldCreate:
+      type: object
+      required:
+        - Name
+        - Label
+        - PossibleValues
+        - Screens
+      properties:
+        Name:
+          type: string
+        Label:
+          type: string
+        PossibleValues:
+          type: object
+          unevaluatedProperties:
+            type: string
+        Screens:
+          type: array
+          items:
+            type: string
+    DynamicFieldCreated:
+      type: object
+      required:
+        - Name
+        - Label
+        - FieldID
+        - Created
+        - Item
+        - EnabledScreens
+      properties:
+        Name:
+          type: string
+          description: Field name.
+        Label:
+          type: string
+          description: Label shown to agents.
+        FieldID:
+          type: integer
+          format: int32
+          minimum: 0
+          description: New field id. 0 when creation failed.
+        Created:
+          type: number
+          enum:
+            - 0
+            - 1
+          description: 1 when this call created the field. 0 when it already existed.
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/DynamicFieldValue'
+          description: Values stored on the field.
+        EnabledScreens:
+          type: array
+          items:
+            type: string
+          description: Agent screens where the field is shown, for example AgentTicketZoom.
+    DynamicFieldItem:
+      type: object
+      required:
+        - Name
+        - Label
+        - FieldType
+        - Valid
+        - IsDropdown
+        - Comment
+      properties:
+        Name:
+          type: string
+          description: Field name used in ticket payloads.
+        Label:
+          type: string
+          description: Label shown to agents.
+        FieldType:
+          type: string
+          description: Field type. Built-in names are Text, TextArea, Checkbox, Dropdown, Multiselect, Date, DateTime, and Integer.
+        Valid:
+          type: number
+          enum:
+            - 0
+            - 1
+          description: 1 when the field is valid.
+        IsDropdown:
+          type: number
+          enum:
+            - 0
+            - 1
+          description: 1 when the field has a fixed value list (Dropdown or Multiselect).
+        Comment:
+          type: string
+          description: Admin comment. Empty when unset.
+    DynamicFieldList:
+      type: object
+      required:
+        - Item
+      properties:
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/DynamicFieldItem'
+    DynamicFieldValue:
+      type: object
+      required:
+        - Key
+        - Value
+      properties:
+        Key:
+          type: string
+        Value:
+          type: string
+    DynamicFieldValues:
+      type: object
+      required:
+        - Item
+      properties:
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/DynamicFieldValue'
+    ErrorBody:
+      type: object
+      required:
+        - detail
+      properties:
+        detail:
+          type: string
+      description: Human-readable error. Not a machine code.
+    FaqItem:
+      type: object
+      required:
+        - ID
+        - Number
+        - Title
+        - Snippet
+        - URL
+        - Path
+        - State
+        - Field1
+      properties:
+        ID:
+          type: integer
+          format: int32
+          minimum: 1
+          description: FAQ item id.
+        Number:
+          type: string
+          description: FAQ number shown in the customer interface.
+        Title:
+          type: string
+          description: FAQ title.
+        Snippet:
+          type: string
+          description: Plain-text excerpt of the answer, at most 400 characters.
+        URL:
+          type: string
+          format: uri
+          description: Absolute customer URL when the system FQDN is set, otherwise a path.
+        Path:
+          type: string
+          description: Path under the ticket system, starting at customer.pl.
+        State:
+          type: string
+          description: FAQ state name, for example `public` or `internal`.
+        Field1:
+          type: string
+          description: FAQ answer field. May contain HTML.
+    FaqList:
+      type: object
+      required:
+        - Status
+        - Query
+        - Item
+      properties:
+        Status:
+          type: string
+          enum:
+            - ok
+            - faq_unavailable
+            - not_found
+            - error
+          description: ok, faq_unavailable, not_found, or error.
+        Query:
+          type: string
+          description: Search text that was applied. `*` lists recent items.
+        Item:
+          type: array
+          items:
+            $ref: '#/components/schemas/FaqItem'
+    FaqPatch:
+      type: object
+      required:
+        - Title
+        - Field1
+      properties:
+        Title:
+          type: string
+        Field1:
+          type: string
+    Forbidden:
+      type: object
+      required:
+        - body
+      properties:
+        body:
+          $ref: '#/components/schemas/ErrorBody'
+    LoginRequest:
+      type: object
+      required:
+        - login
+        - password
+      properties:
+        login:
+          type: string
+          description: Agent login or customer user login.
+        password:
+          type: string
+          format: password
+          description: Password. Shown as a secret in the API reference.
+    LoginResponse:
+      type: object
+      required:
+        - token
+        - SessionID
+        - UserID
+        - UserLogin
+        - CustomerID
+        - Role
+        - expires_at
+      properties:
+        token:
+          type: string
+          description: 'Bearer token. Send it as `Authorization: Bearer <token>`.'
+        SessionID:
+          type: string
+          description: Same value as token. Kept for older clients.
+        UserID:
+          type: string
+          description: Agent user id as a decimal string, or the customer login.
+        UserLogin:
+          type: string
+          description: Login that authenticated.
+        CustomerID:
+          type: string
+          description: Customer company id. Empty for agents.
+        Role:
+          type: string
+          enum:
+            - agent
+            - customer
+          description: Which login was used.
+        expires_at:
+          type: integer
+          format: int64
+          minimum: 0
+          description: Unix time in seconds when the token expires.
+    NamedRef:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Primary key in the ticket system.
+        name:
+          type: string
+          description: Display name, for example the queue or state name.
+      description: 'Catalogue entry: numeric id plus the display name.'
+    Ticket:
+      type: object
+      required:
+        - TicketID
+        - TicketNumber
+        - Title
+        - State
+        - Queue
+        - Priority
+        - Type
+        - Service
+        - CustomerUser
+        - Owner
+        - Created
+        - Changed
+        - Article
+        - id
+        - title
+        - state
+        - queue
+        - priority
+        - articles
+      properties:
+        TicketID:
+          type: string
+          pattern: ^[0-9]+$
+          description: Ticket id as a decimal string. Same value as id.
+        TicketNumber:
+          type: string
+          description: Ticket number shown to agents. May include a prefix.
+        Title:
+          type: string
+          description: Ticket title.
+        State:
+          type: string
+          description: State name, for example `new` or `open`.
+        Queue:
+          type: string
+          description: Queue name.
+        Priority:
+          type: string
+          description: Priority name, for example `3 normal`.
+        Type:
+          type: string
+          description: Type name. Empty when types are disabled.
+        Service:
+          type: string
+          description: Service name. Empty when the ticket has no service.
+        CustomerUser:
+          type: string
+          description: Customer user login.
+        Owner:
+          type: string
+          description: Owner login.
+        Created:
+          type: string
+          description: When the ticket was created, `YYYY-MM-DD HH:MM:SS` in the ticket-system timezone.
+        Changed:
+          type: string
+          description: When the ticket last changed, `YYYY-MM-DD HH:MM:SS` in the ticket-system timezone.
+        Article:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+          description: Articles on the ticket. Same rows as articles.
+        id:
+          type: integer
+          format: int32
+          minimum: 1
+          description: Ticket id as an integer.
+        title:
+          type: string
+          description: Same text as Title.
+        state:
+          $ref: '#/components/schemas/NamedRef'
+          description: State id and name.
+        queue:
+          $ref: '#/components/schemas/NamedRef'
+          description: Queue id and name.
+        priority:
+          $ref: '#/components/schemas/NamedRef'
+          description: Priority id and name.
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+          description: Articles on the ticket. Same rows as Article.
+    TicketList:
+      type: object
+      required:
+        - Ticket
+      properties:
+        Ticket:
+          type: array
+          items:
+            $ref: '#/components/schemas/Ticket'
+    TicketPatch:
+      type: object
+      required:
+        - title
+        - queue
+        - state
+        - priority
+        - type
+        - service
+        - State
+        - dynamic_fields
+      properties:
+        title:
+          type: string
+        queue:
+          type: string
+        state:
+          type: string
+        priority:
+          type: string
+        type:
+          type: string
+        service:
+          type: string
+        State:
+          type: string
+        dynamic_fields:
+          type: object
+          unevaluatedProperties:
+            type: string
+    TicketWrite:
+      type: object
+      required:
+        - title
+        - queue
+        - state
+        - priority
+        - type
+        - service
+        - customer_user
+        - article
+        - dynamic_fields
+      properties:
+        title:
+          type: string
+        queue:
+          type: string
+        state:
+          type: string
+        priority:
+          type: string
+        type:
+          type: string
+        service:
+          type: string
+        customer_user:
+          type: string
+        article:
+          $ref: '#/components/schemas/ArticleBody'
+        dynamic_fields:
+          type: object
+          unevaluatedProperties:
+            type: string
+    WebhookEvent:
+      type: object
+      required:
+        - event_type
+        - subject
+        - source_event
+        - attribute
+        - article_id
+        - value
+      properties:
+        event_type:
+          type: string
+          enum:
+            - ticket_created
+            - ticket_attribute_changed
+            - ticket_deleted
+            - faq_changed
+        subject:
+          $ref: '#/components/schemas/WebhookSubject'
+        source_event:
+          type: string
+        attribute:
+          type: string
+        article_id:
+          type: string
+        value:
+          type: string
+      description: 'JSON body the package POSTs to the webhook URL. Header: Authorization: Bearer <webhook token>.'
+    WebhookSubject:
+      type: object
+      required:
+        - kind
+        - id
+      properties:
+        kind:
+          type: string
+          enum:
+            - ticket
+            - faq
+        id:
+          type: string
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: Bearer
+servers:
+  - url: /otai-api.pl
+    description: Ticket system script
+    variables: {}
